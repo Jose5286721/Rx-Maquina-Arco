@@ -11,6 +11,9 @@ public class App {
             GpioController gpioController = GpioFactory.getInstance();
             pin = gpioController.provisionDigitalOutputPin(RaspiPin.GPIO_05,"LED", PinState.LOW);
         }
-        pin.toggle();
+        while (true){
+            pin.toggle();
+            Thread.sleep(200);
+        }
     }
 }
