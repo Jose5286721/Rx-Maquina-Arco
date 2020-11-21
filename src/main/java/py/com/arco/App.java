@@ -6,12 +6,12 @@ import com.pusher.client.PusherOptions;
 import com.pusher.client.channel.*;
 
 public class App {
-    //private static GpioPinDigitalOutput pin;
+    private static GpioPinDigitalOutput pin;
     public static void main(String[] args){
-            //if(pin == null){
-            //    GpioController gpioController = GpioFactory.getInstance();
-            //    pin = gpioController.provisionDigitalOutputPin(RaspiPin.GPIO_02,"led", PinState.LOW);
-            //}
+            if(pin == null){
+                GpioController gpioController = GpioFactory.getInstance();
+                pin = gpioController.provisionDigitalOutputPin(RaspiPin.GPIO_02,"led", PinState.LOW);
+            }
             PusherOptions pusherOptions = new PusherOptions();
             pusherOptions.setCluster("us2");
             Pusher pusher = new Pusher("eaec0efbd968f46ba3f8", pusherOptions);
@@ -20,9 +20,9 @@ public class App {
             channel.bind("App\\Events\\HabilitarMaquinaSucursal", new SubscriptionEventListener() {
                 @Override
                 public void onEvent(PusherEvent event) {
-                    //pin.high();
-                    System.out.println(event.getData());
-                    //detenerMaquina();
+                    pin.high();
+                    //System.out.println(event.getData());
+                    detenerMaquina();
                 }
             });
             new Thread(new Runnable() {
@@ -45,7 +45,7 @@ public class App {
             public void run() {
                 try{
                     Thread.sleep(30*1000);
-                    //pin.low();
+                    pin.low();
                 }catch (InterruptedException ex){
                     ex.printStackTrace();
                 }
