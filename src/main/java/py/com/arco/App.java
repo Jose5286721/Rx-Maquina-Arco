@@ -7,6 +7,7 @@ import com.pusher.client.channel.*;
 
 public class App {
     private static GpioPinDigitalOutput pin;
+    private static final Integer TIME_SHOOT_MACHINE_RX_IN_SECONDS = 40*1000;
     public static void main(String[] args){
             if(pin == null){
                 GpioController gpioController = GpioFactory.getInstance();
@@ -44,7 +45,7 @@ public class App {
             @Override
             public void run() {
                 try{
-                    Thread.sleep(30*1000);
+                    Thread.sleep(TIME_SHOOT_MACHINE_RX_IN_SECONDS);
                     pin.low();
                 }catch (InterruptedException ex){
                     ex.printStackTrace();
