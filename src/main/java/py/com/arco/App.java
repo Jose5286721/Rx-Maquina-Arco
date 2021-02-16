@@ -45,6 +45,7 @@ public class App {
             @Override
             public void run() {
                 try{
+                    System.out.println("Se esta ejecutando el segundo plano");
                     Thread.sleep(TIME_SHOOT_MACHINE_RX_IN_SECONDS);
                     System.out.println("La maquina se desactivo");
                     pin.low();
@@ -52,6 +53,6 @@ public class App {
                     ex.printStackTrace();
                 }
             }
-        });
+        }).start();
     }
 }
