@@ -24,7 +24,6 @@ public class App {
                     pin.high();
                     //System.out.println(event.getData());
                     detenerMaquina();
-                    detenerMaquina();
                 }
             });
             new Thread(new Runnable() {
@@ -47,7 +46,7 @@ public class App {
             public void run() {
                 try{
                     Thread.sleep(TIME_SHOOT_MACHINE_RX_IN_SECONDS);
-                    System.out.println("Lmaquina se desaactivo");
+                    System.out.println("La maquina se desactivo");
                     pin.low();
                 }catch (InterruptedException ex){
                     ex.printStackTrace();
