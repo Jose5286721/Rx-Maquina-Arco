@@ -17,7 +17,7 @@ public class App {
             pusherOptions.setCluster("us2");
             Pusher pusher = new Pusher("eaec0efbd968f46ba3f8", pusherOptions);
             pusher.connect();
-            Channel channel = pusher.subscribe("sucursales.6");
+            Channel channel = pusher.subscribe("sucursales.7");
             channel.bind("App\\Events\\HabilitarMaquinaSucursal", new SubscriptionEventListener() {
                 @Override
                 public void onEvent(PusherEvent event) {
