@@ -31,9 +31,11 @@ public class App {
             try{
                 AuthUser authUser = callSyncLogin.execute().body();
                 if(authUser != null){
+                    System.out.println("Se obtuvo el usuario de la maquina");
                     Call<User> callSyncUser = authMaquina.getUser(authUser);
                     userMaquina = callSyncUser.execute().body();
                     if(userMaquina != null){
+                        System.out.println("Se comienza a conectar al canal de presencia");
                         connectToPresenceChannel(authUser);
                     }
                 }
