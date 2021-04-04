@@ -4,14 +4,41 @@ import com.pi4j.io.gpio.*;
 import com.pusher.client.Pusher;
 import com.pusher.client.PusherOptions;
 import com.pusher.client.channel.*;
+import com.pusher.client.util.HttpAuthorizer;
+import py.com.arco.Entity.AuthUser;
+import py.com.arco.Entity.User;
+import py.com.arco.Services.AuthMaquinaImpl;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 public class App {
     private static GpioPinDigitalOutput pin;
+    private static User userMaquina;
+    private static AuthMaquinaImpl authMaquina;
     private static final Integer TIME_SHOOT_MACHINE_RX_IN_SECONDS = 40*1000;
     public static void main(String[] args){
             if(pin == null){
                 GpioController gpioController = GpioFactory.getInstance();
                 pin = gpioController.provisionDigitalOutputPin(RaspiPin.GPIO_02,"led", PinState.LOW);
+            }
+            authMaquina = new AuthMaquinaImpl();
+            Call<AuthUser> callSyncLogin = authMaquina.loginMaquinaSucursal(7);
+            try{
+                AuthUser authUser = callSyncLogin.execute().body();
+                if(authUser != null){
+                    Call<User> callSyncUser = authMaquina.getUser(authUser);
+                    userMaquina = callSyncUser.execute().body();
+                    if(userMaquina != null){
+                        connectToPresenceChannel(authUser);
+                    }
+                }
+            }catch (Exception ex){
+                ex.printStackTrace();
             }
             PusherOptions pusherOptions = new PusherOptions();
             pusherOptions.setCluster("us2");
@@ -39,6 +66,18 @@ public class App {
                 }
             }).start();
 
+    }
+    private static void connectToPresenceChannel(AuthUser authUser){
+        Map<String,String> headers = new HashMap<>();
+        headers.put("Authorization",authUser.getToken_type().concat(" ").concat(authUser.getAccess_token()));
+        HttpAuthorizer authorizer = new HttpAuthorizer("https://sys.arco.com.py/broadcasting/auth");
+        authorizer.setHeaders(headers);
+        PusherOptions pusherOptions = new PusherOptions();
+        pusherOptions.setCluster("us2");
+        pusherOptions.setAuthorizer(authorizer);
+        Pusher pusher = new Pusher("eaec0efbd968f46ba3f8",pusherOptions);
+        pusher.connect();
+        PresenceChannel presenceChannel = pusher.subscribePresence("presence-dispositivos.7");
     }
     private static void detenerMaquina(){
         new Thread(new Runnable() {
