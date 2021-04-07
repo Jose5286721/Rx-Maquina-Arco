@@ -27,7 +27,7 @@ public class App {
                 pin = gpioController.provisionDigitalOutputPin(RaspiPin.GPIO_02,"led", PinState.LOW);
             }
             authMaquina = new AuthMaquinaImpl();
-            Call<AuthUser> callSyncLogin = authMaquina.loginMaquinaSucursal(7);
+            Call<AuthUser> callSyncLogin = authMaquina.loginMaquinaSucursal(8);
             try{
                 AuthUser authUser = callSyncLogin.execute().body();
                 if(authUser != null){
@@ -46,7 +46,7 @@ public class App {
             pusherOptions.setCluster("us2");
             Pusher pusher = new Pusher("eaec0efbd968f46ba3f8", pusherOptions);
             pusher.connect();
-            Channel channel = pusher.subscribe("sucursales.7");
+            Channel channel = pusher.subscribe("sucursales.8");
             channel.bind("App\\Events\\HabilitarMaquinaSucursal", new SubscriptionEventListener() {
                 @Override
                 public void onEvent(PusherEvent event) {
