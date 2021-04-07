@@ -79,7 +79,7 @@ public class App {
         pusherOptions.setAuthorizer(authorizer);
         Pusher pusher = new Pusher("eaec0efbd968f46ba3f8",pusherOptions);
         pusher.connect();
-        PresenceChannel presenceChannel = pusher.subscribePresence("presence-dispositivos.7");
+        PresenceChannel presenceChannel = pusher.subscribePresence("presence-dispositivos.8");
     }
     private static void detenerMaquina(){
         new Thread(new Runnable() {
