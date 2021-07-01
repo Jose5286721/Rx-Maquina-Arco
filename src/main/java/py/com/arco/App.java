@@ -43,7 +43,10 @@ public class App {
                 ex.printStackTrace();
             }
             PusherOptions pusherOptions = new PusherOptions();
-            pusherOptions.setCluster("us2");
+            pusherOptions.setCluster("mt1");
+            pusherOptions.setHost("192.168.0.23");
+            pusherOptions.setUseTLS(false);
+            pusherOptions.setWsPort(6001);
             Pusher pusher = new Pusher("eaec0efbd968f46ba3f8", pusherOptions);
             pusher.connect();
             Channel channel = pusher.subscribe("sucursales.8");
