@@ -44,17 +44,17 @@ public class App {
             }
             PusherOptions pusherOptions = new PusherOptions();
             pusherOptions.setCluster("mt1");
-            pusherOptions.setHost("192.168.0.23");
-            pusherOptions.setUseTLS(false);
-            pusherOptions.setWsPort(6001);
+            pusherOptions.setHost("sys.arco.com.py");
+            pusherOptions.setUseTLS(true);
+            pusherOptions.setWssPort(443);
             Pusher pusher = new Pusher("eaec0efbd968f46ba3f8", pusherOptions);
             pusher.connect();
-            Channel channel = pusher.subscribe("sucursales.8");
+            Channel channel = pusher.subscribe("sucursales.1");
             channel.bind("App\\Events\\HabilitarMaquinaSucursal", new SubscriptionEventListener() {
                 @Override
                 public void onEvent(PusherEvent event) {
                     pin.high();
-                    //System.out.println(event.getData());
+                    System.out.println(event.getData());
                     detenerMaquina();
                 }
             });
@@ -75,10 +75,12 @@ public class App {
     private static void connectToPresenceChannel(AuthUser authUser){
         Map<String,String> headers = new HashMap<>();
         headers.put("Authorization",authUser.getToken_type().concat(" ").concat(authUser.getAccess_token()));
-        HttpAuthorizer authorizer = new HttpAuthorizer("https://sys.arco.com.py/broadcasting/auth");
+        HttpAuthorizer authorizer = new HttpAuthorizer("https://sys.arco.com.py/api/broadcasting/auth");
         authorizer.setHeaders(headers);
         PusherOptions pusherOptions = new PusherOptions();
-        pusherOptions.setCluster("us2");
+        pusherOptions.setCluster("mt1");
+        pusherOptions.setHost("sys.arco.com.py");
+        pusherOptions.setWssPort(443);
         pusherOptions.setAuthorizer(authorizer);
         Pusher pusher = new Pusher("eaec0efbd968f46ba3f8",pusherOptions);
         pusher.connect();
