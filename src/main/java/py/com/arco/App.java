@@ -54,7 +54,7 @@ public class App {
                 @Override
                 public void onEvent(PusherEvent event) {
                     pin.high();
-                    System.out.println(event.getData());
+//                    System.out.println(event.getData());
                     detenerMaquina();
                 }
             });
